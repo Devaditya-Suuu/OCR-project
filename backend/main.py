@@ -1,3 +1,5 @@
+import os
+
 import nltk
 from contextlib import asynccontextmanager
 
@@ -23,14 +25,21 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS – allow the Vite dev server and common local origins
+# CORS – allow local dev servers + deployed frontend
+allowed_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+]
+
+# Add the deployed frontend URL from env var (e.g. https://your-app.vercel.app)
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    allowed_origins.append(frontend_url.rstrip("/"))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

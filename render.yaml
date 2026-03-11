@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: docreader-api
+    runtime: python
+    region: oregon
+    rootDir: backend
+    buildCommand: |
+      pip install -r requirements.txt
+      apt-get update && apt-get install -y tesseract-ocr
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: FRONTEND_URL
+        sync: false          # set this manually to your Vercel URL
+      - key: PYTHON_VERSION
+        value: "3.13.0"
