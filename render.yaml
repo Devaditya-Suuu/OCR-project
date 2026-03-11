@@ -1,19 +1,9 @@
 services:
   - type: web
     name: docreader
-    runtime: python
+    runtime: docker
     region: oregon
-    buildCommand: |
-      # Install Node.js & build the React frontend
-      apt-get update && apt-get install -y tesseract-ocr nodejs npm
-      npm install && npm run build
-      # Copy Vite output into the backend so FastAPI can serve it
-      cp -r dist backend/static
-      # Install Python dependencies
-      cd backend && pip install -r requirements.txt
-    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    dockerfilePath: ./Dockerfile
     envVars:
-      - key: PYTHON_VERSION
-        value: "3.13.0"
-      - key: NODE_VERSION
-        value: "20"
+      - key: PORT
+        value: "8000"
