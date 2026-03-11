@@ -1,4 +1,7 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// In production the frontend is served by FastAPI on the same origin,
+// so API calls use a relative path (empty string).  During local dev
+// the Vite server is on :5173 while FastAPI runs on :8000.
+const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : '');
 
 /**
  * Send a single image file to the OCR endpoint and get back extracted text.
